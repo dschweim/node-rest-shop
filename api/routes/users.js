@@ -86,21 +86,22 @@ router.post('/login', (req, res, next) => {
 				connection.query("SELECT id FROM user WHERE email = '" + email + "' AND password = '" + password + "'", (error, rows) => {
 									
 					if(rows.length > 0){
-						/*const token = jwt.sign(
-						{
-							email: email
-							//userid
-						}, 
-
-						process.env.JWT_KEY, 
+										
+						var userid = rows[0].id;
 						
+						const token = jwt.sign(
+						{
+							email: email,
+							userid: userid
+						}, 
+						process.env.JWT_KEY, 
 						{
 							expiresIn: "1h"
 						}
-						);*/
+						);
 						return res.status(200).json({
 							message: 'Authorization succesful',
-							//token: token
+							token: token
 						});
 						
 					}
