@@ -1,6 +1,5 @@
 const express = require('express');
 const mysql = require('mysql');
-
 const server = require('./server');
 
 //Verbindung zur lokalen MySQL Datenbank initiieren

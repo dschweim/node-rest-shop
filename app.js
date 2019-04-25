@@ -5,18 +5,21 @@ const app = express();
 const morgan = require('morgan');
 
 //Einbinden der Ressourcen 
-const countryRes = require('./api/routes/ressources');
+const ressources = require('./api/routes/ressources');
+const userRes = require('./api/routes/users');
 
 //Einbinden des Morgan Package
 app.use(morgan('dev'));
 
+
 //Middleware zur Weiterleitung der Requests
-app.use('/', countryRes);
+app.use('/', ressources);
+app.use('/user', userRes);
 
 
 //Verarbeitung der Anfragen, falls ungültiges Anfrageformat (ungültigte URL) liefere Fehlercode
 app.use((req, res, next) => {
-	const error = new Error('Ungültige URL (not found)');
+	const error = new Error('Invalid URL (not found)');
 	error.status = 404;
 	next(error);
 })
