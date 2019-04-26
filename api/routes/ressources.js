@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bodyparser = require('body-parser');
-const checkauth = require('../../auth');
+const auth = require('../../auth');
 
 //Package zur Übersetzung der SQL Responses in JSON-Format einbinden
 router.use(bodyparser.json());
@@ -11,7 +11,7 @@ require('../../db');
 
 //Countries
 //Liefere eine Liste alle Länder zurück
-router.get('/countries', checkauth, (req, res, next) =>  {
+router.get('/countries', auth, (req, res, next) =>  {
 	connection.query("SELECT DISTINCT land FROM adresse", (error, rows) => {
 		if(error)
 		console.log(error);
@@ -28,7 +28,7 @@ router.get('/countries', checkauth, (req, res, next) =>  {
 });
 
 //Liefere den Namen des Landes zurück, zu dem die Ländernummer gehört
-router.get('/countries/:countryId', checkauth,(req, res, next) =>  { 
+router.get('/countries/:countryId', auth,(req, res, next) =>  { 
 	const countryId = req.params.countryId;
 	
 	connection.query("SELECT DISTINCT land FROM adresse WHERE landID = '" + countryId + "'", (error, rows) => {
@@ -48,7 +48,7 @@ router.get('/countries/:countryId', checkauth,(req, res, next) =>  {
 
 //Locations
 //Liefere alle Betriebe (BNR) zurück, die im spezifischen Land existieren
-router.get('/countries/:countryId/locations', checkauth, (req, res, next) =>  {
+router.get('/countries/:countryId/locations', auth, (req, res, next) =>  {
 	const countryId = req.params.countryId;
 	
 	connection.query("SELECT bnr FROM betrieb WHERE bnr IN (SELECT bnr FROM lage WHERE adressID IN(SELECT adressID FROM adresse WHERE landID =" + countryId + "));", (error, rows) => {
@@ -68,7 +68,7 @@ router.get('/countries/:countryId/locations', checkauth, (req, res, next) =>  {
 
 
 //Liefere die Angaben zum Betrieb zurück (nur BNR)
-router.get('/countries/:countryId/locations/:locationId', checkauth, (req, res, next) =>  {
+router.get('/countries/:countryId/locations/:locationId', auth, (req, res, next) =>  {
 	const countryId = req.params.countryId;
 	const locationId = req.params.locationId;
 	
@@ -89,7 +89,7 @@ router.get('/countries/:countryId/locations/:locationId', checkauth, (req, res, 
 
 //Parts
 //Liefere alle Bestände (TNR und Mengen) zurück, die in der Lokation noch vorrätig sind
-router.get('/countries/:countryId/locations/:locationId/parts', checkauth, (req, res, next) =>  {
+router.get('/countries/:countryId/locations/:locationId/parts', auth, (req, res, next) =>  {
 	const countryId = req.params.countryId;
 	const locationId = req.params.locationId;
 	
@@ -110,7 +110,7 @@ router.get('/countries/:countryId/locations/:locationId/parts', checkauth, (req,
 
 
 //Liefere Bestand an einer spezifischen Lokation zu einem spezifischen Ersatzteil
-router.get('/countries/:countryId/locations/:locationId/parts/:partsId', checkauth, (req, res, next) =>  {
+router.get('/countries/:countryId/locations/:locationId/parts/:partsId', auth, (req, res, next) =>  {
 	const countryId = req.params.countryId;
 	const locationId = req.params.locationId;
 	const partsId = req.params.partsId;
@@ -131,7 +131,7 @@ router.get('/countries/:countryId/locations/:locationId/parts/:partsId', checkau
 });
 
 //Liefere eine Liste an Händlern (BNR und Mengen), die das Teil vorrätig haben
-router.get('/parts/:partsId', checkauth, (req, res, next) =>  {
+router.get('/parts/:partsId', auth, (req, res, next) =>  {
 	const partsId = req.params.partsId;
 	
 	connection.query("SELECT bnr, menge FROM bestand WHERE tnr = '" + partsId + "'", (error, rows) => {
