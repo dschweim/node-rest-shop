@@ -126,5 +126,10 @@ router.post('/login', (req, res, next) => {
 router.all('/signup' ,(req, res, next) => {
     res.status(405).json();
 });
+
+//Fehlermeldung für nicht unterstützte Abfrageformate
+router.all('/login' ,(req, res, next) => {
+    res.status(405).json();
+});
 	
 module.exports = router;

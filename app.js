@@ -14,7 +14,7 @@ app.use(morgan('dev'));
 
 //Middleware zur Weiterleitung der Requests
 app.use('/', ressources);
-app.use('/user', userRes);
+app.use('/users', userRes);
 
 
 //Verarbeitung der Anfragen, falls ungültiges Anfrageformat (ungültigte URL) liefere Fehlercode
